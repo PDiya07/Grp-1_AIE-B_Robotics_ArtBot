@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ART-BOT | Virtual Lab — 22AIE214</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      background: #f5f4f0;
+      color: #1a1a1a;
+      font-family: 'IBM Plex Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* TOP HEADER */
+    .top-bar {
+      background: #1c2b4a;
+      color: #fff;
+      padding: 0 2rem;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid #e8a020;
+      gap: 1rem;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .lab-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .lab-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: #e8a020;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .lab-logo-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+
+    .top-bar-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .top-bar-course {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.5px;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .top-badge {
+      background: #e8a020;
+      color: #1c2b4a;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb-bar {
+      background: #fff;
+      border-bottom: 1px solid #e0ddd6;
+      padding: 0.55rem 2rem;
+      font-size: 0.75rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .breadcrumb-bar a {
+      color: #2563a8;
+      text-decoration: none;
+    }
+
+    .breadcrumb-bar a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-bar span {
+      color: #999;
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid #e0ddd6;
+      position: sticky;
+      top: 52px;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-section-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #aaa;
+      padding: 0.5rem 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li a {
+      display: block;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.82rem;
+      color: #444;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      font-weight: 400;
+    }
+
+    .sidebar-nav li a:hover {
+      background: #f0f4fb;
+      color: #1c2b4a;
+      border-left-color: #a0b4cc;
+    }
+
+    .sidebar-nav li a.active {
+      background: #eef3fb;
+      color: #1c2b4a;
+      border-left-color: #1c2b4a;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      display: inline-block;
+      width: 18px;
+      margin-right: 0.4rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      padding: 2.5rem 3rem 4rem;
+      max-width: 1000px;
+      min-width: 0;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      border-bottom: 2px solid #1c2b4a;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .page-header-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.4rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #1c2b4a;
+      line-height: 1.2;
+    }
+
+    .page-header-meta {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: #666;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 70px;
+    }
+
+    .section-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1c2b4a;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #d0cec8;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title .sec-num {
+      background: #1c2b4a;
+      color: #fff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #2d3e5f;
+      margin-top: 1.5rem;
+      margin-bottom: 0.7rem;
+    }
+
+    p {
+      margin-bottom: 0.9rem;
+      line-height: 1.8;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: #eef3fb;
+      border-left: 4px solid #1c2b4a;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      font-size: 0.88rem;
+    }
+
+    .info-box.amber {
+      border-left-color: #e8a020;
+      background: #fdf7ee;
+    }
+
+    .info-box.green {
+      border-left-color: #2a7a4b;
+      background: #edf7f1;
+    }
+
+    .info-box.red {
+      border-left-color: #b93434;
+      background: #fdf0f0;
+    }
+
+    .info-box strong {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      color: #1c2b4a;
+    }
+
+    .info-box.amber strong {
+      color: #9a6010;
+    }
+
+    .info-box.green strong {
+      color: #2a7a4b;
+    }
+
+    .info-box.red strong {
+      color: #b93434;
+    }
+
+    /* OBJ BOX */
+    .obj-primary {
+      background: #1c2b4a;
+      color: #fff;
+      padding: 1.5rem 1.8rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .obj-primary .label {
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .obj-primary p {
+      color: #d4dde8;
+      font-size: 0.92rem;
+      margin: 0;
+      line-height: 1.75;
+    }
+
+    .obj-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 1rem 0;
+    }
+
+    .obj-list li {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      padding: 0.75rem 1rem;
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      font-size: 0.87rem;
+      line-height: 1.65;
+    }
+
+    .obj-list li::before {
+      content: attr(data-n);
+      background: #e8a020;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .data-table thead tr {
+      background: #1c2b4a;
+      color: #fff;
+    }
+
+    .data-table th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #e8e5de;
+      color: #333;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tbody tr:nth-child(even) td {
+      background: #f8f7f4;
+    }
+
+    .data-table td:first-child {
+      font-weight: 600;
+      color: #1c2b4a;
+    }
+
+    /* STEP LIST */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1.2rem 0;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 0;
+    }
+
+    .step-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1c2b4a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: #e0ddd6;
+      margin: 4px 0;
+    }
+
+    .step-item:last-child .step-line {
+      display: none;
+    }
+
+    .step-body {
+      padding: 0 0 1.5rem 1rem;
+    }
+
+    .step-body h4 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1c2b4a;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-tag.theory {
+      background: #eef3fb;
+      color: #1c2b4a;
+      border: 1px solid #c0cfe0;
+    }
+
+    .step-tag.impl {
+      background: #edf7f1;
+      color: #2a7a4b;
+      border: 1px solid #a8d4bc;
+    }
+
+    .step-body p {
+      font-size: 0.84rem;
+      color: #444;
+      margin-bottom: 0.6rem;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: #1a1f2e;
+      border-radius: 4px;
+      padding: 1.1rem 1.3rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: #a8d8b9;
+      line-height: 1.75;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      white-space: pre;
+      border-left: 3px solid #e8a020;
+    }
+
+    /* MATH */
+    .math-display {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: #1c2b4a;
+      line-height: 1.9;
+      overflow-x: auto;
+      margin: 1rem 0;
+      white-space: pre;
+    }
+
+    /* SIMULATION */
+    .sim-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .sim-canvas-wrap {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+
+    .sim-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sim-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2a7a4b;
+      animation: blk 1.1s ease-in-out infinite;
+    }
+
+    @keyframes blk {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.2
+      }
+    }
+
+    .control-panel {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1.2rem;
+    }
+
+    .ctrl-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid #f0ede8;
+    }
+
+    .ctrl-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .ctrl-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .ctrl-label span:first-child {
+      color: #555;
+      font-weight: 500;
+    }
+
+    .ctrl-label span:last-child {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: #1c2b4a;
+      font-weight: 600;
+      background: #eef3fb;
+      padding: 0 0.4rem;
+      border-radius: 2px;
+    }
+
+    input[type=range] {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      background: #d8d4cc;
+      border-radius: 2px;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #1c2b4a;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .ee-readout {
+      margin-top: 1rem;
+      background: #1c2b4a;
+      border-radius: 4px;
+      padding: 0.9rem 1rem;
+    }
+
+    .ee-readout-label {
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.4rem;
+    }
+
+    .ee-readout-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: #e8a020;
+    }
+
+    /* TWO COL */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .mini-card {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      padding: 1.1rem 1.2rem;
+      border-radius: 4px;
+    }
+
+    .mini-card h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .mini-card ul {
+      list-style: none;
+    }
+
+    .mini-card li {
+      font-size: 0.8rem;
+      color: #444;
+      padding: 0.25rem 0;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .mini-card.challenge li::before {
+      content: '✗';
+      color: #b93434;
+    }
+
+    .mini-card.progress li::before {
+      content: '✓';
+      color: #2a7a4b;
+    }
+
+    /* HW CARD */
+    .hw-card {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .hw-card-header {
+      background: #1c2b4a;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hw-row {
+      display: grid;
+      grid-template-columns: 40% 60%;
+      border-top: 1px solid #f0ede8;
+      font-size: 0.84rem;
+    }
+
+    .hw-row:first-child {
+      border-top: none;
+    }
+
+    .hw-row div {
+      padding: 0.6rem 1rem;
+    }
+
+    .hw-row div:first-child {
+      color: #666;
+      background: #f8f7f4;
+      font-weight: 500;
+    }
+
+    .hw-row div:last-child {
+      color: #1a1a1a;
+    }
+
+    /* PIPELINE GRID */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .pipeline-card {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .pipeline-card:hover {
+      border-color: #1c2b4a;
+    }
+
+    .p-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #e8a020;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.3rem;
+    }
+
+    .p-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .p-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1c2b4a;
+      margin-bottom: 0.25rem;
+    }
+
+    .p-desc {
+      font-size: 0.74rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* JOINT CARDS */
+    .joint-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+
+    .joint-card {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1rem;
+      text-align: center;
+      border-top: 3px solid #1c2b4a;
+    }
+
+    .j-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #d8d4cc;
+    }
+
+    .j-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1c2b4a;
+      margin: 0.2rem 0;
+    }
+
+    .j-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.4rem;
+    }
+
+    .j-desc {
+      font-size: 0.74rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* METRICS ROW */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .metric-card {
+      background: #1c2b4a;
+      color: #fff;
+      border-radius: 4px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .m-val {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e8a020;
+    }
+
+    .m-unit {
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .m-desc {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 0.2rem;
+    }
+
+    /* OBSERVATIONS */
+    .obs-list {
+      list-style: none;
+      margin: 1rem 0;
+    }
+
+    .obs-list li {
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #f0ede8;
+      font-size: 0.87rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .obs-list li:last-child {
+      border-bottom: none;
+    }
+
+    .obs-list li::before {
+      content: '●';
+      color: #2a7a4b;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* CHALLENGE TABLE */
+    .ch-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      font-size: 0.84rem;
+    }
+
+    .ch-table thead tr {
+      background: #1c2b4a;
+      color: #fff;
+    }
+
+    .ch-table th {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+
+    .ch-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #e8e5de;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .ch-table tbody tr:nth-child(even) td {
+      background: #f8f7f4;
+    }
+
+    .ch-table td.prob {
+      color: #b93434;
+      font-weight: 600;
+    }
+
+    .ch-table td.sol {
+      color: #2a7a4b;
+    }
+
+    /* CONTRIB */
+    .contrib-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .contrib-card {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1.3rem 1rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .contrib-card:hover {
+      border-color: #1c2b4a;
+    }
+
+    .contrib-av {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      margin: 0 auto 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .av1 {
+      background: #1c2b4a;
+    }
+
+    .av2 {
+      background: #2a7a4b;
+    }
+
+    .av3 {
+      background: #9a6010;
+    }
+
+    .av4 {
+      background: #7a2a3a;
+    }
+
+    .contrib-card h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1c2b4a;
+      margin-bottom: 0.2rem;
+    }
+
+    .contrib-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: #999;
+      margin-bottom: 0.4rem;
+    }
+
+    .contrib-role {
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    .course-info-strip {
+      background: #1c2b4a;
+      color: rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      padding: 1rem 1.5rem;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      font-size: 0.8rem;
+    }
+
+    .course-info-strip .cif span {
+      display: block;
+    }
+
+    .cif-label {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .cif-val {
+      color: #fff;
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    /* CONCLUSION BOX */
+    .conclusion-box {
+      background: #1c2b4a;
+      color: #fff;
+      border-radius: 4px;
+      padding: 1.8rem 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .conclusion-box .c-label {
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .conclusion-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .conclusion-points li {
+      display: flex;
+      gap: 0.7rem;
+      font-size: 0.88rem;
+      color: #d4dde8;
+      line-height: 1.7;
+    }
+
+    .conclusion-points li::before {
+      content: '→';
+      color: #e8a020;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-weight: 700;
+    }
+
+    /* ADVANTAGES */
+    .adv-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+
+    .adv-item {
+      background: #fff;
+      border: 1px solid #e0ddd6;
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .adv-icon-box {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .adv-item h5 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1c2b4a;
+      margin-bottom: 0.3rem;
+    }
+
+    .adv-item p {
+      font-size: 0.8rem;
+      color: #555;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #1c2b4a;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.78rem;
+      border-top: 3px solid #e8a020;
+    }
+
+    footer strong {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-content {
+        padding: 1.5rem;
+      }
+
+      .contrib-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .sim-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .two-col,
+      .adv-two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .joint-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .metrics-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .pipeline-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP HEADER -->
+<header class="top-bar">
+  <div class="top-bar-left">
+    <a href="#" class="lab-logo">
+      <div class="lab-logo-icon">🤖</div>
+      <span class="lab-logo-text">ART-BOT Virtual Lab</span>
+    </a>
+    <div class="top-bar-divider"></div>
+    <span class="top-bar-course">22AIE214 — Introduction to AI &amp; Robotics</span>
+  </div>
+  <div class="top-bar-right">
+    <span class="top-badge">Group Project</span>
+      <span>Amrita School of AI</span>
+      <a href="https://www.canva.com/design/DAHC_V9VPXo/MHQaXdBM073N2F_yGmnVYg/edit?utm_content=DAHC_V9VPXo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" style="background:#e8a020; color:#1c2b4a; padding:0.5rem 1.2rem; border-radius:5px; font-weight:800; font-size:0.95rem; text-decoration:none; letter-spacing:0.5px; display:flex; align-items:center; gap:0.5rem; box-shadow:0 2px 8px rgba(232,160,32,0.5); white-space:nowrap;">📊 View Presentation</a>
+
+  </div>
+</header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <a href="#">AI &amp; Robotics Lab</a>
+    <span>›</span>
+    <a href="#">22AIE214 Projects</a>
+    <span>›</span>
+    ArtBot: Autonomous AI-Driven Robotic Drawing System
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sidebar-section-label">Sections</div>
+      <ul class="sidebar-nav">
+        <li><a href="#introduction" class="active"><span class="nav-icon">📋</span>Introduction</a></li>
+        <li><a href="#motivation"><span class="nav-icon">💡</span>Motivation</a></li>
+        <li><a href="#architecture"><span class="nav-icon">🏗</span>Architecture</a></li>
+        <li><a href="#hardware"><span class="nav-icon">⚙️</span>Hardware</a></li>
+        <li><a href="#ai-integration"><span class="nav-icon">🧠</span>AI Integration</a></li>
+        <li><a href="#path-planning"><span class="nav-icon">📐</span>Path Planning</a></li>
+        <li><a href="#kinematics"><span class="nav-icon">∠</span>Kinematics</a></li>
+        <li><a href="#control-loop"><span class="nav-icon">🔄</span>Control Loop</a></li>
+        <li><a href="#simulation"><span class="nav-icon">🖥</span>Simulation</a></li>
+        <li><a href="#results"><span class="nav-icon">📊</span>Results</a></li>
+        <li><a href="#challenges"><span class="nav-icon">⚠️</span>Challenges</a></li>
+        <li><a href="#advantages"><span class="nav-icon">✅</span>Advantages</a></li>
+        <li><a href="#conclusion"><span class="nav-icon">🏁</span>Conclusion</a></li>
+        <li><a href="#team"><span class="nav-icon">👥</span>Team</a></li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div class="page-header-tag">Project Report · Course 22AIE214</div>
+        <h1>ArtBot: Autonomous AI-Driven Robotic Drawing System</h1>
+        <div class="page-header-meta">
+          <span>4-DOF Serial Manipulator</span>
+          <span>Google Gemini + Python</span>
+          <span>Arduino UNO + PCA9685</span>
+          <span>Drawing Accuracy ≈ ±2 mm</span>
+        </div>
+      </div>
+
+      <!-- ==================== INTRODUCTION ==================== -->
+      <section class="section" id="introduction">
+        <div class="section-title"><span class="sec-num">01</span> Introduction</div>
+
+        <p>
+          ArtBot is an intelligent robotic drawing system that integrates <strong>artificial intelligence</strong>,
+          mathematical modeling, and embedded control systems to translate natural language prompts into physical
+          artwork.
+        </p>
+
+        <div class="info-box">
+          <strong>What makes ArtBot different</strong>
+          Unlike conventional robotic systems that require predefined motion commands, ArtBot enables natural language
+          interaction, automated coordinate generation, real-time motion computation, and physical reproduction of
+          AI-generated shapes.
+        </div>
+
+        <p>The system demonstrates how computational intelligence can be embodied into mechanical motion using kinematic
+          transformations and real-time control loops.</p>
+
+        <div class="section-subtitle">Key Capabilities</div>
+        <ul class="obj-list">
+          <li data-n="01">Natural Language Interaction — user simply describes the shape in plain English (e.g. "Draw a
+            square")</li>
+          <li data-n="02">Automated Coordinate Generation — AI converts the description into structured 2D Cartesian (x,
+            y) vertex data</li>
+          <li data-n="03">Real-Time Motion Computation — inverse kinematics is solved on the fly for every interpolated
+            path point</li>
+          <li data-n="04">Physical Reproduction of AI-Generated Shapes — the robotic arm physically draws the result on
+            paper with a pen</li>
+        </ul>
+      </section>
+
+      <!-- ==================== MOTIVATION ==================== -->
+      <section class="section" id="motivation">
+        <div class="section-title"><span class="sec-num">02</span> Motivation</div>
+
+        <p>The evolution of robotics has primarily focused on industrial automation, repetitive task execution, and
+          precision manufacturing. However, <strong>creative robotics</strong> remains a largely underexplored domain.
+        </p>
+
+        <div class="info-box amber">
+          <strong>Core Concept</strong>
+          ArtBot explores the concept of <em>embodied AI</em> — where digital intelligence produces tangible, physical
+          outputs that exist in the real world.
+        </div>
+
+        <div class="section-subtitle">Three Key Research Directions</div>
+        <ul class="obj-list">
+          <li data-n="1">Bridging generative AI with physical robotic systems — closing the gap between language models
+            and mechanical actuators.</li>
+          <li data-n="2">Applying inverse kinematics in real-world hardware — validating mathematical IK models on a
+            servo-based 4-DOF arm.</li>
+          <li data-n="3">Creating a cost-effective educational robotics platform — demonstrating AI-robotics integration
+            with accessible, low-cost components.</li>
+        </ul>
+      </section>
+
+      <!-- ==================== ARCHITECTURE ==================== -->
+      <section class="section" id="architecture">
+        <div class="section-title"><span class="sec-num">03</span> Overall System Architecture</div>
+
+        <p>The complete ArtBot pipeline consists of <strong>11 sequential stages</strong>, each transforming the data
+          into a form usable by the next stage — from user text input through to physical pen-on-paper output.</p>
+
+        <div class="pipeline-grid">
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 01</div>
+            <div class="p-icon">💬</div>
+            <div class="p-title">User Prompt</div>
+            <div class="p-desc">User provides a natural language instruction (e.g. "Draw a square"). This triggers the
+              complete drawing pipeline.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 02</div>
+            <div class="p-icon">🧠</div>
+            <div class="p-title">Generative AI (Gemini)</div>
+            <div class="p-desc">Prompt is sent to Google Gemini. Model interprets the instruction and converts it into
+              structured 2D coordinate data.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 03</div>
+            <div class="p-icon">📍</div>
+            <div class="p-title">Coordinate Generation</div>
+            <div class="p-desc">AI outputs a list of Cartesian (x, y) points representing the key vertices of the
+              requested shape.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 04</div>
+            <div class="p-icon">〰</div>
+            <div class="p-title">Path Processing &amp; Interpolation</div>
+            <div class="p-desc">Sparse vertex points are converted into dense intermediate points. Linear interpolation
+              ensures straight-line motion between vertices.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 05</div>
+            <div class="p-icon">∠</div>
+            <div class="p-title">Inverse Kinematics</div>
+            <div class="p-desc">Each (x, y, z) coordinate is converted into joint angles. Equations compute θ₁, θ₂, θ₃,
+              and θ₄.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 06</div>
+            <div class="p-icon">📋</div>
+            <div class="p-title">Servo Angle Commands</div>
+            <div class="p-desc">Calculated angles are formatted into structured command strings. Each command represents
+              the target position for all four joints.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 07</div>
+            <div class="p-icon">🔌</div>
+            <div class="p-title">Serial Communication</div>
+            <div class="p-desc">Angle commands are transmitted via UART serial at 115200 baud from the Python backend to
+              the Arduino controller.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 08</div>
+            <div class="p-icon">🟢</div>
+            <div class="p-title">Arduino Control</div>
+            <div class="p-desc">Arduino receives and interprets incoming angle packets. It forwards PWM instructions to
+              the servo driver module.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 09</div>
+            <div class="p-icon">📡</div>
+            <div class="p-title">PWM Servo Driver (PCA9685)</div>
+            <div class="p-desc">Generates high-resolution 12-bit PWM signals. Drives multiple servo motors
+              simultaneously with stable timing.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 10</div>
+            <div class="p-icon">🦾</div>
+            <div class="p-title">Robotic Arm Motion</div>
+            <div class="p-desc">Servo motors rotate to the commanded joint angles. The robotic arm moves precisely along
+              the planned trajectory.</div>
+          </div>
+          <div class="pipeline-card">
+            <div class="p-num">STAGE 11</div>
+            <div class="p-icon">🎨</div>
+            <div class="p-title">Physical Drawing Output</div>
+            <div class="p-desc">The pen tip follows the computed path on paper. The requested geometric shape is
+              physically reproduced.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== HARDWARE ==================== -->
+      <section class="section" id="hardware">
+        <div class="section-title"><span class="sec-num">04</span> Hardware Architecture &amp; Robotic Manipulator
+          Design</div>
+
+        <p>The robotic arm is a <strong>4-Degree-of-Freedom (4-DOF) serial manipulator</strong>. Each joint is actuated
+          using a servo motor. This configuration enables precise positioning of the pen tip within the drawing
+          workspace.</p>
+
+        <div class="section-subtitle">4.1 Joint Configuration</div>
+        <div class="joint-grid">
+          <div class="joint-card">
+            <div class="j-num">J1</div>
+            <div class="j-name">Base</div>
+            <div class="j-type">YAW</div>
+            <div class="j-desc">Controls horizontal rotation across the entire drawing workspace.</div>
+          </div>
+          <div class="joint-card">
+            <div class="j-num">J2</div>
+            <div class="j-name">Shoulder</div>
+            <div class="j-type">PITCH</div>
+            <div class="j-desc">Controls vertical elevation of the arm segments.</div>
+          </div>
+          <div class="joint-card">
+            <div class="j-num">J3</div>
+            <div class="j-name">Elbow</div>
+            <div class="j-type">PITCH</div>
+            <div class="j-desc">Controls arm extension and reach towards the target.</div>
+          </div>
+          <div class="joint-card">
+            <div class="j-num">J4</div>
+            <div class="j-name">Wrist</div>
+            <div class="j-type">PITCH</div>
+            <div class="j-desc">Maintains pen perpendicular to the drawing surface at all times.</div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">4.2 Electronic Control Architecture</div>
+        <p>The electronic system separates control logic, actuation, and power delivery into distinct layers to ensure
+          stability and precision.</p>
+
+        <div class="hw-card">
+          <div class="hw-card-header">Microcontroller Layer — Arduino Uno</div>
+          <div class="hw-row">
+            <div>Role</div>
+            <div>Primary controller — receives joint angles via serial communication</div>
+          </div>
+          <div class="hw-row">
+            <div>Function</div>
+            <div>Interprets command packets and sends PWM control signals to PCA9685</div>
+          </div>
+          <div class="hw-row">
+            <div>Interface</div>
+            <div>UART serial at 115200 baud (from Python) + I²C to PCA9685</div>
+          </div>
+          <div class="hw-row">
+            <div>Command Format</div>
+            <div><code>Base,Shoulder,Elbow,Wrist</code> — e.g. <code>90,110,45,25</code></div>
+          </div>
+        </div>
+
+        <div class="hw-card">
+          <div class="hw-card-header">Servo Driver Layer — PCA9685 16-Channel PWM Driver</div>
+          <div class="hw-row">
+            <div>Resolution</div>
+            <div>12-bit high resolution (4096 steps per cycle)</div>
+          </div>
+          <div class="hw-row">
+            <div>Channels</div>
+            <div>16 independent PWM channels — simultaneously controls all 4 servos</div>
+          </div>
+          <div class="hw-row">
+            <div>Advantage 1</div>
+            <div>Reduced Arduino processing load — offloads all PWM generation</div>
+          </div>
+          <div class="hw-row">
+            <div>Advantage 2</div>
+            <div>Eliminates software timing jitter for smoother, more precise servo movement</div>
+          </div>
+        </div>
+
+        <div class="hw-card">
+          <div class="hw-card-header">Power System — Dedicated 5V 5A SMPS</div>
+          <div class="hw-row">
+            <div>Configuration</div>
+            <div>Dedicated switched-mode power supply with isolated servo power rail</div>
+          </div>
+          <div class="hw-row">
+            <div>Purpose</div>
+            <div>Prevents voltage drop and Arduino reset during high-torque servo movement</div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">4.3 Mechanical Workspace &amp; Coordinate System</div>
+        <p>To control the robot mathematically, a Cartesian coordinate system is defined with the robot base as origin.
+          The pen tip acts as the end-effector.</p>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Axis</th>
+                <th>Direction</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>X-axis</td>
+                <td>Horizontal movement</td>
+                <td>Left-right sweep across the drawing workspace</td>
+              </tr>
+              <tr>
+                <td>Y-axis</td>
+                <td>Lateral movement</td>
+                <td>Forward-backward reach along the drawing plane</td>
+              </tr>
+              <tr>
+                <td>Z-axis</td>
+                <td>Vertical depth</td>
+                <td>Pen height — controls contact with the paper surface</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>All AI-generated coordinates are mapped into this coordinate frame before inverse kinematics computation is
+          performed.</p>
+      </section>
+
+      <!-- ==================== AI INTEGRATION ==================== -->
+      <section class="section" id="ai-integration">
+        <div class="section-title"><span class="sec-num">05</span> Generative AI Integration</div>
+
+        <p>The system uses <strong>Google Gemini</strong> as the generative AI model to convert natural language drawing
+          instructions into structured 2D coordinate data. This forms the interface between AI-generated concepts and
+          robotic motion planning.</p>
+
+        <div class="section-subtitle">5.1 How It Works</div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">1</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>User provides a natural language prompt</h4>
+              <span class="step-tag theory">Input</span>
+              <p>Examples: <em>"Draw a square"</em>, <em>"Draw a triangle"</em>, <em>"Draw a pentagon"</em></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">2</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Prompt is sent to Google Gemini API</h4>
+              <span class="step-tag theory">AI Processing</span>
+              <p>Gemini interprets the geometric intent of the prompt and outputs a structured list of Cartesian vertex
+                coordinates.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">3</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Python extracts and parses the coordinate data</h4>
+              <span class="step-tag impl">Implementation</span>
+              <p>Python uses regular expression pattern matching to extract coordinate pairs from the AI response and
+                converts them into a numerical list for further processing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">5.2 Example AI Output</div>
+        <p>For the prompt <em>"Draw a square"</em>, Google Gemini outputs the following vertex coordinates:</p>
+        <div class="code-block">// Prompt: "Draw a square"
+          // Gemini AI Output → Structured coordinate list:
+
+          (100, -20)
+          (120, -20)
+          (120, 20)
+          (100, 20)
+
+          // Python extraction using regex pattern matching:
+          import re
+          coords = re.findall(r'\((-?\d+),\s*(-?\d+)\)', gemini_response)
+          points = [(int(x), int(y)) for x, y in coords]</div>
+
+        <div class="info-box green">
+          <strong>AI-to-Robot Interface</strong>
+          The coordinate output from Gemini serves as the direct input to the path planning and interpolation stage,
+          seamlessly bridging language understanding with physical robot motion.
+        </div>
+      </section>
+
+      <!-- ==================== PATH PLANNING ==================== -->
+      <section class="section" id="path-planning">
+        <div class="section-title"><span class="sec-num">06</span> Path Planning &amp; Trajectory Generation</div>
+
+        <p>The AI returns only the <strong>key vertices</strong> of a shape. Direct joint movement between vertices —
+          without intermediate waypoints — causes curved trajectories because rotational joints move in arcs, not
+          straight lines.</p>
+
+        <div class="info-box red">
+          <strong>The Core Problem</strong>
+          When a robotic joint moves from angle A to angle B, the end-effector traces a circular arc in Cartesian space.
+          For straight-line drawing, this must be corrected.
+        </div>
+
+        <div class="section-subtitle">6.1 Solution: Linear Interpolation</div>
+        <p>Dense intermediate points are generated between every pair of vertices using linear interpolation. This
+          converts each straight line segment into N micro-steps, each small enough that the arc deviation is
+          negligible.</p>
+
+        <div class="math-display">// Linear interpolation between two shape vertices
+          // P₁(x₁, y₁) → P₂(x₂, y₂)
+
+          For i = 0 to N:
+          xᵢ = x₁ + i × ((x₂ − x₁) / N)
+          yᵢ = y₁ + i × ((y₂ − y₁) / N)
+
+          Where:
+          N = number of intermediate steps (controls smoothness)
+          xᵢ = interpolated x coordinate at step i
+          yᵢ = interpolated y coordinate at step i</div>
+
+        <div class="two-col">
+          <div class="mini-card challenge">
+            <h5 style="color:#b93434;">✗ Without Interpolation</h5>
+            <ul>
+              <li>Only vertex coordinates are commanded</li>
+              <li>Joint space motion produces curved arcs</li>
+              <li>Straight lines appear bent or curved on paper</li>
+              <li>Geometric accuracy is compromised</li>
+            </ul>
+          </div>
+          <div class="mini-card progress">
+            <h5 style="color:#2a7a4b;">✓ With Linear Interpolation</h5>
+            <ul>
+              <li>Dense micro-points generated per segment</li>
+              <li>Each step is a tiny, nearly-straight movement</li>
+              <li>Smooth straight-line drawing output</li>
+              <li>Improved geometric accuracy</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== KINEMATICS ==================== -->
+      <section class="section" id="kinematics">
+        <div class="section-title"><span class="sec-num">07</span> Mathematical Foundation of Inverse Kinematics</div>
+
+        <p><strong>Inverse Kinematics (IK)</strong> is the mathematical process that determines the joint angles
+          required to position the end-effector (pen tip) at a desired target position in 3D space. Rather than manually
+          controlling each motor, the target position is specified and the angles are computed automatically.</p>
+
+        <div class="info-box">
+          <strong>The IK Problem Statement</strong>
+          Given a target 3D position P(x, y, z), compute joint angles θ₁ (Base), θ₂ (Shoulder), θ₃ (Elbow), and θ₄
+          (Wrist) such that the pen tip reaches P exactly.
+        </div>
+
+        <div class="section-subtitle">7.1 Base Rotation — θ₁</div>
+        <p>The base joint rotates the entire arm horizontally to point toward the target. The <code>atan2</code>
+          function is used to ensure correct quadrant handling. An offset of +90° aligns the coordinate frame with the
+          robot's physical orientation.</p>
+        <div class="math-display">θ₁ = atan2(y, x) + 90°
+
+          Where:
+          atan2(y, x) → computes angle from origin to target in XY plane
+          +90° → coordinate frame alignment offset</div>
+
+        <div class="section-subtitle">7.2 Horizontal &amp; 3D Distance</div>
+        <p>Before computing shoulder and elbow angles, two intermediate distances are calculated. These form the sides
+          of the geometric triangle used in the law-of-cosines solution.</p>
+        <div class="math-display">// Horizontal reach of the arm in XY plane:
+          r = √(x² + y²)
+
+          // 3D distance from shoulder joint to target point:
+          d = √(r² + z²)
+
+          Note: d is the hypotenuse of the triangle formed by
+          link L₁, link L₂, and the shoulder-to-target line.</div>
+
+        <div class="section-subtitle">7.3 Elbow Angle — θ₃</div>
+        <p>The elbow angle is solved directly using the <strong>Law of Cosines</strong> applied to the triangle formed
+          by link L₁, link L₂, and the shoulder-to-target distance d.</p>
+        <div class="math-display">cos(θ₃) = (L₁² + L₂² − d²) / (2 · L₁ · L₂)
+
+          θ₃ = arccos( (L₁² + L₂² − d²) / (2 · L₁ · L₂) )
+
+          Where:
+          L₁ = upper arm link length (shoulder to elbow)
+          L₂ = forearm link length (elbow to wrist)
+          d = shoulder-to-target distance (computed above)</div>
+
+        <div class="section-subtitle">7.4 Shoulder Angle — θ₂</div>
+        <p>The shoulder angle combines two components: α, the elevation angle to the target, and β, the internal angle
+          at the shoulder vertex of the link triangle.</p>
+        <div class="math-display">α = atan2(z, r) // elevation to target
+          β = arccos( (L₁² + d² − L₂²) / (2 · L₁ · d) ) // internal angle
+
+          θ₂ = α + β</div>
+
+        <div class="section-subtitle">7.5 Wrist Angle — θ₄</div>
+        <p>The wrist angle is derived from a constraint: the pen must remain perpendicular to the drawing surface at all
+          times. This is enforced by computing the remaining angle needed to keep the tool orientation fixed.</p>
+        <div class="math-display">θ₄ = 180° − (θ₂ + θ₃)
+
+          This ensures the pen tip is always perpendicular to the paper,
+          regardless of the shoulder and elbow configuration.
+          (Total angle constraint: θ₂ + θ₃ + θ₄ = 180°)</div>
+
+        <div class="section-subtitle">7.6 D-H Parameters for ArtBot Arm</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Joint</th>
+                <th>Description</th>
+                <th>Rotation Type</th>
+                <th>Angle Variable</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Joint 1 — Base</td>
+                <td>Horizontal yaw rotation</td>
+                <td>Yaw (Z-axis)</td>
+                <td>θ₁ = atan2(y,x) + 90°</td>
+                <td>Workspace positioning</td>
+              </tr>
+              <tr>
+                <td>Joint 2 — Shoulder</td>
+                <td>Vertical pitch elevation</td>
+                <td>Pitch (Y-axis)</td>
+                <td>θ₂ = α + β</td>
+                <td>Arm elevation</td>
+              </tr>
+              <tr>
+                <td>Joint 3 — Elbow</td>
+                <td>Forearm pitch</td>
+                <td>Pitch (Y-axis)</td>
+                <td>θ₃ = arccos(...)</td>
+                <td>Reach control</td>
+              </tr>
+              <tr>
+                <td>Joint 4 — Wrist</td>
+                <td>Pen angle maintenance</td>
+                <td>Pitch (Y-axis)</td>
+                <td>θ₄ = 180° − (θ₂+θ₃)</td>
+                <td>Perpendicular pen</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== CONTROL LOOP ==================== -->
+      <section class="section" id="control-loop">
+        <div class="section-title"><span class="sec-num">08</span> Control Loop &amp; Command Execution</div>
+
+        <p>The <strong>Python program</strong> acts as the primary controller, orchestrating the entire drawing
+          sequence. It bridges the AI-generated coordinate data with the physical hardware in real time.</p>
+
+        <div class="section-subtitle">8.1 Control Sequence</div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">1</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Generate interpolated waypoints</h4>
+              <span class="step-tag impl">Software</span>
+              <p>Apply linear interpolation to the AI-provided vertex list, creating N dense (x, y) coordinate points
+                for each line segment of the shape.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">2</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Compute IK for each waypoint</h4>
+              <span class="step-tag impl">Software</span>
+              <p>For each interpolated point (x, y, z), apply the inverse kinematics equations to compute the four joint
+                angles θ₁, θ₂, θ₃, θ₄.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">3</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Convert angles to servo commands</h4>
+              <span class="step-tag impl">Software</span>
+              <p>Format the four computed angles into a comma-separated command string matching the Arduino
+                communication protocol.</p>
+              <div class="code-block">// Command format: Base,Shoulder,Elbow,Wrist
+                // Example output:
+                cmd = f"{int(t1)},{int(t2)},{int(t3)},{int(t4)}\n"
+                # → "90,110,45,25\n"</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-connector">
+              <div class="step-circle">4</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <h4>Transmit via serial communication</h4>
+              <span class="step-tag theory">Hardware</span>
+              <p>Each command string is transmitted over USB-UART serial at 115200 baud from Python to the Arduino. The
+                Arduino parses the packet and forwards PWM instructions to the PCA9685 servo driver.</p>
+              <div class="code-block">import serial, time
+                ser = serial.Serial('COM3', 115200, timeout=1)
+
+                for point in interpolated_path:
+                t1, t2, t3, t4 = inverse_kinematics(point)
+                cmd = f"{t1},{t2},{t3},{t4}\n"
+                ser.write(cmd.encode())
+                time.sleep(0.05) # allow servo settling time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">8.2 Command Timing</div>
+        <div class="hw-card">
+          <div class="hw-card-header">Serial Communication Specification</div>
+          <div class="hw-row">
+            <div>Baud Rate</div>
+            <div>115200 bps (UART)</div>
+          </div>
+          <div class="hw-row">
+            <div>Format</div>
+            <div><code>Base,Shoulder,Elbow,Wrist\n</code> — four integers separated by commas</div>
+          </div>
+          <div class="hw-row">
+            <div>Update Rate</div>
+            <div>~20 commands/second (50ms inter-command delay)</div>
+          </div>
+          <div class="hw-row">
+            <div>Example</div>
+            <div><code>90,110,45,25</code> — moves arm to: Base=90°, Shoulder=110°, Elbow=45°, Wrist=25°</div>
+          </div>
+          <div class="hw-row">
+            <div>Arduino Processing</div>
+            <div>Receives packet → parses 4 integers → calls PCA9685.setPWM() for each channel</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SIMULATION ==================== -->
+      <section class="section" id="simulation">
+        <div class="section-title"><span class="sec-num">09</span> 3D Arm Simulation</div>
+
+        <p>The 3D simulation below models the ArtBot 4-DOF arm in real time using forward kinematics. Use the joint
+          sliders to observe end-effector positioning — the same mathematical relationships used in the physical system.
+        </p>
+
+        <div class="sim-layout">
+          <div class="sim-canvas-wrap" style="padding:0; overflow:hidden; border-radius:8px;">
+            <div class="sim-label"
+              style="padding: 1rem 1.5rem; border-bottom: 1px solid #e0ddd6; margin-bottom: 0; background: #fff;">
+              <div class="sim-live-dot"></div>
+              Live 3D Simulation — Autonomous Drawing &nbsp;<span
+                style="font-size:0.65rem;color:#aaa;font-weight:400;">(drag to orbit)</span>
+            </div>
+            <canvas id="threeContainer" style="width:100%; height:450px; background:#141c2b; display:block;"></canvas>
+          </div>
+
+          <div>
+            <div class="control-panel">
+              <div class="ctrl-title">Shape Generator Prompt</div>
+              <div class="ctrl-group" style="display:flex; gap:0.5rem; margin-bottom: 0.8rem;">
+                <input type="text" id="aiPrompt" placeholder="e.g. Square, Circle..." autocomplete="off"
+                  style="flex:1; padding:0.6rem; border:1px solid #d8d4cc; border-radius:4px; font-family:inherit; font-size:0.85rem; outline:none;">
+                <button onclick="processInput()"
+                  style="background:#1c2b4a; color:#fff; border:none; padding:0 1rem; border-radius:4px; font-weight:600; cursor:pointer; font-size:0.8rem;">DRAW</button>
+              </div>
+
+              <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom: 1.5rem;">
+                <span class="shape-chip" onclick="document.getElementById('aiPrompt').value='Square'; processInput()"
+                  style="font-size:0.7rem; background:#f0f4fb; border:1px solid #c0cfe0; padding:0.2rem 0.6rem; border-radius:12px; cursor:pointer; color:#1c2b4a; font-weight:500;">Square</span>
+                <span class="shape-chip" onclick="document.getElementById('aiPrompt').value='Circle'; processInput()"
+                  style="font-size:0.7rem; background:#f0f4fb; border:1px solid #c0cfe0; padding:0.2rem 0.6rem; border-radius:12px; cursor:pointer; color:#1c2b4a; font-weight:500;">Circle</span>
+                <span class="shape-chip" onclick="document.getElementById('aiPrompt').value='Star'; processInput()"
+                  style="font-size:0.7rem; background:#f0f4fb; border:1px solid #c0cfe0; padding:0.2rem 0.6rem; border-radius:12px; cursor:pointer; color:#1c2b4a; font-weight:500;">Star</span>
+                <span class="shape-chip" onclick="document.getElementById('aiPrompt').value='Spiral'; processInput()"
+                  style="font-size:0.7rem; background:#f0f4fb; border:1px solid #c0cfe0; padding:0.2rem 0.6rem; border-radius:12px; cursor:pointer; color:#1c2b4a; font-weight:500;">Spiral</span>
+                <span class="shape-chip" onclick="document.getElementById('aiPrompt').value='Hexagon'; processInput()"
+                  style="font-size:0.7rem; background:#f0f4fb; border:1px solid #c0cfe0; padding:0.2rem 0.6rem; border-radius:12px; cursor:pointer; color:#1c2b4a; font-weight:500;">Hexagon</span>
+              </div>
+
+              <div class="ctrl-title" style="margin-top:2rem;">Live Telemetry</div>
+              <div class="ctrl-group"
+                style="display:flex; justify-content:space-between; border-bottom:1px solid #f0ede8; padding-bottom:0.4rem; margin-bottom:0.6rem;">
+                <span style="font-size:0.75rem; color:#666;">End Effector X,Z</span>
+                <span id="eePos"
+                  style="font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:#e8a020; font-weight:600;">0.00,
+                  0.00</span>
+              </div>
+              <div class="ctrl-group"
+                style="display:flex; justify-content:space-between; border-bottom:1px solid #f0ede8; padding-bottom:0.4rem; margin-bottom:0.6rem;">
+                <span style="font-size:0.75rem; color:#666;">θ₁ Base</span>
+                <span id="t1v"
+                  style="font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:#2a7a4b; font-weight:600;">90.0°</span>
+              </div>
+              <div class="ctrl-group"
+                style="display:flex; justify-content:space-between; border-bottom:1px solid #f0ede8; padding-bottom:0.4rem; margin-bottom:0.6rem;">
+                <span style="font-size:0.75rem; color:#666;">θ₂ Shoulder</span>
+                <span id="t2v"
+                  style="font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:#2a7a4b; font-weight:600;">45.0°</span>
+              </div>
+              <div class="ctrl-group"
+                style="display:flex; justify-content:space-between; border-bottom:1px solid #f0ede8; padding-bottom:0.4rem; margin-bottom:0.6rem;">
+                <span style="font-size:0.75rem; color:#666;">θ₃ Elbow</span>
+                <span id="t3v"
+                  style="font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:#2a7a4b; font-weight:600;">-30.0°</span>
+              </div>
+              <div class="ctrl-group"
+                style="display:flex; justify-content:space-between; border-bottom:1px solid #f0ede8; padding-bottom:0.4rem; margin-bottom:1.5rem;">
+                <span style="font-size:0.75rem; color:#666;">θ₄ Wrist</span>
+                <span id="t4v"
+                  style="font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:#2a7a4b; font-weight:600;">165.0°</span>
+              </div>
+
+              <div class="ee-readout" style="background:#1c2b4a; text-align:center;">
+                <div class="ee-readout-label" style="color:rgba(255,255,255,0.6);">SYSTEM STATUS</div>
+                <div class="ee-readout-val" id="sysState" style="color:#2a7a4b;">IDLE / READY</div>
+              </div>
+            </div>
+
+            <div class="info-box green" style="margin-top:1rem;">
+              <strong>IK Validation</strong>
+              Paths are verified for workspace reachability and path continuity before being transmitted to hardware.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== RESULTS ==================== -->
+      <section class="section" id="results">
+        <div class="section-title"><span class="sec-num">10</span> Experimental Results &amp; Performance</div>
+
+        <p>The system was tested with multiple geometric shapes including squares, triangles, and other polygons. All
+          tests demonstrated stable, accurate, and repeatable drawing performance.</p>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="m-unit">accuracy</div>
+            <div class="m-val">±2 mm</div>
+            <div class="m-desc">Drawing position error</div>
+          </div>
+          <div class="metric-card">
+            <div class="m-unit">response time</div>
+            <div class="m-val">~3 s</div>
+            <div class="m-desc">Prompt to first pen stroke</div>
+          </div>
+          <div class="metric-card">
+            <div class="m-unit">baud rate</div>
+            <div class="m-val">115k</div>
+            <div class="m-desc">Serial communication</div>
+          </div>
+          <div class="metric-card">
+            <div class="m-unit">pwm resolution</div>
+            <div class="m-val">12-bit</div>
+            <div class="m-desc">4096 steps per servo</div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">10.1 Observations</div>
+        <ul class="obs-list">
+          <li>Smooth multi-joint coordinated motion achieved across all four degrees of freedom simultaneously</li>
+          <li>Accurate coordinate tracking — pen tip followed the interpolated path with ±2 mm deviation</li>
+          <li>Stable servo operation throughout — no resets or voltage drops with dedicated SMPS power supply</li>
+          <li>Successful reproduction of square and triangle shapes confirmed correct IK implementation</li>
+          <li>Pen maintained perpendicular contact with drawing surface at all positions (wrist constraint θ₄ working
+            correctly)</li>
+          <li>Google Gemini reliably parsed natural language shape descriptions into valid coordinate lists</li>
+          <li>Python IK computation loop executed within microseconds per point — no latency bottleneck</li>
+          <li>Linear interpolation effectively eliminated curved line artifacts visible without it</li>
+        </ul>
+
+        <div class="section-subtitle">10.2 Shapes Successfully Drawn</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Shape</th>
+                <th>Vertices</th>
+                <th>Interpolated Points</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Square</td>
+                <td>4</td>
+                <td>~80 points</td>
+                <td>✓ Successfully drawn with sharp corners</td>
+              </tr>
+              <tr>
+                <td>Triangle</td>
+                <td>3</td>
+                <td>~60 points</td>
+                <td>✓ Successfully drawn with accurate angles</td>
+              </tr>
+              <tr>
+                <td>Rectangle</td>
+                <td>4</td>
+                <td>~80 points</td>
+                <td>✓ Correct proportions maintained</td>
+              </tr>
+              <tr>
+                <td>Pentagon</td>
+                <td>5</td>
+                <td>~100 points</td>
+                <td>✓ Equal side lengths and angles verified</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== CHALLENGES ==================== -->
+      <section class="section" id="challenges">
+        <div class="section-title"><span class="sec-num">11</span> Challenges &amp; Solutions</div>
+
+        <p>Three key engineering challenges were encountered and resolved during development and testing of the ArtBot
+          system.</p>
+
+        <table class="ch-table">
+          <thead>
+            <tr>
+              <th>Challenge</th>
+              <th>Root Cause</th>
+              <th>Engineering Solution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="prob">⚠ Servo Instability</td>
+              <td>Voltage drop on shared Arduino 5V rail during high-torque servo movement caused erratic behavior and
+                random microcontroller resets.</td>
+              <td class="sol">✓ Implemented a dedicated 5V 5A switched-mode power supply (SMPS) with an isolated servo
+                power rail. PCA9685 offloads all PWM generation from Arduino.</td>
+            </tr>
+            <tr>
+              <td class="prob">⚠ Curved Drawing Lines</td>
+              <td>Rotational joint motion between only the vertex endpoints produces circular arcs in Cartesian space
+                instead of straight lines on paper.</td>
+              <td class="sol">✓ Applied linear interpolation between every pair of vertices to generate N dense
+                micro-waypoints. Straight-line motion approximated at each small step.</td>
+            </tr>
+            <tr>
+              <td class="prob">⚠ Pen Height Calibration</td>
+              <td>Mechanical assembly tolerances caused inconsistent pen-to-paper contact — too high produced no ink,
+                too low caused dragging and smearing.</td>
+              <td class="sol">✓ Introduced an adjustable Z-offset parameter in the Python software. Allows fine-tuning
+                of pen contact height without any physical hardware changes.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== ADVANTAGES ==================== -->
+      <section class="section" id="advantages">
+        <div class="section-title"><span class="sec-num">12</span> Advantages</div>
+
+        <div class="adv-two-col">
+          <div class="adv-item">
+            <div class="adv-icon-box">🔗</div>
+            <div>
+              <h5>AI-to-Hardware Integration</h5>
+              <p>Integrates generative AI with real-time robotic motion control, bridging software intelligence and
+                physical actuation in a unified pipeline.</p>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon-box">📐</div>
+            <div>
+              <h5>Practical Inverse Kinematics</h5>
+              <p>Demonstrates real-world implementation of analytical inverse kinematics for accurate, predictable
+                coordinate-based positioning on physical hardware.</p>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon-box">💰</div>
+            <div>
+              <h5>Low-Cost &amp; Scalable</h5>
+              <p>Built entirely from low-cost, widely available components (Arduino Uno, servo motors, PCA9685) — making
+                the system affordable and scalable for educational use.</p>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon-box">🧩</div>
+            <div>
+              <h5>Modular Architecture</h5>
+              <p>Features a modular design that clearly separates AI processing, mathematical modeling, and hardware
+                control layers — each can be independently upgraded.</p>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon-box">🎓</div>
+            <div>
+              <h5>Educational Platform</h5>
+              <p>Serves as an effective educational and experimental platform for studying robotics, motion planning,
+                embedded systems, and generative AI in a hands-on context.</p>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon-box">🎨</div>
+            <div>
+              <h5>Creative Robotics Domain</h5>
+              <p>Explores the underexplored domain of creative robotics — demonstrating that physical systems can
+                express AI-generated artistic intent as tangible output.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CONCLUSION ==================== -->
+      <section class="section" id="conclusion">
+        <div class="section-title"><span class="sec-num">13</span> Conclusion</div>
+
+        <p>The ArtBot project successfully demonstrates that the gap between digital intelligence and physical actuation
+          can be bridged with a well-designed, end-to-end pipeline.</p>
+
+        <div class="conclusion-box">
+          <div class="c-label">Summary of Achievements</div>
+          <ul class="conclusion-points">
+            <li>The ArtBot system successfully demonstrates the integration of Generative AI with real-time robotic
+              motion control.</li>
+            <li>Natural language prompts are effectively transformed into structured 2D coordinates and precise
+              mechanical movements.</li>
+            <li>Mathematical inverse kinematics enables accurate joint angle computation for real-time drawing
+              execution.</li>
+            <li>The system validates a complete AI-to-hardware pipeline from text input to physical drawing output (±2
+              mm, ~3s).</li>
+            <li>This project bridges artificial intelligence, robotics, mathematics, and embedded systems into a unified
+              functional platform.</li>
+            <li>ArtBot explores the concept of embodied AI — where digital intelligence produces tangible physical
+              outputs in the real world.</li>
+          </ul>
+        </div>
+
+        <div class="info-box amber" style="margin-top:1.5rem;">
+          <strong>Future Scope</strong>
+          Potential extensions include support for free-form curved shapes, multi-color pen swapping, vision-based
+          feedback for error correction, higher-DOF arm configurations, and integration with image-based AI generation
+          for richer artistic output.
+        </div>
+      </section>
+
+      <!-- ==================== TEAM ==================== -->
+      <section class="section" id="team">
+        <div class="section-title"><span class="sec-num">14</span> Team &amp; Course Information</div>
+
+        <div class="contrib-grid">
+          <div class="contrib-card">
+            <div class="contrib-av av1">VK</div>
+            <h4>CH Vaishnavi Krishna</h4>
+            <div class="contrib-id">CB.SC.U4AIE24108</div>
+            <div class="contrib-role">AI Integration &amp; Coordinate Generation</div>
+          </div>
+          <div class="contrib-card">
+            <div class="contrib-av av2">DP</div>
+            <h4>Diya Prakash</h4>
+            <div class="contrib-id">CB.SC.U4AIE24111</div>
+            <div class="contrib-role">Path Planning &amp; Interpolation</div>
+          </div>
+          <div class="contrib-card">
+            <div class="contrib-av av3">DK</div>
+            <h4>Dondluru Keerthana</h4>
+            <div class="contrib-id">CB.SC.U4AIE24112</div>
+            <div class="contrib-role">Inverse Kinematics &amp; Control Loop</div>
+          </div>
+          <div class="contrib-card">
+            <div class="contrib-av av4">VS</div>
+            <h4>V R Sridevi</h4>
+            <div class="contrib-id">CB.SC.U4AIE24166</div>
+            <div class="contrib-role">Hardware Design &amp; Arduino Programming</div>
+          </div>
+        </div>
+
+        <div class="course-info-strip">
+          <div class="cif"><span class="cif-label">Course Code</span><span class="cif-val">22AIE214</span></div>
+          <div class="cif"><span class="cif-label">Course Title</span><span class="cif-val">Introduction to AI &amp;
+              Robotics</span></div>
+          <div class="cif"><span class="cif-label">Project Type</span><span class="cif-val">Group Project</span></div>
+          <div class="cif"><span class="cif-label">Hardware</span><span class="cif-val">4-DOF Arm, Arduino UNO,
+              PCA9685</span></div>
+          <div class="cif"><span class="cif-label">AI Stack</span><span class="cif-val">Google Gemini + Python</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <strong>ArtBot: Autonomous AI-Driven Robotic Drawing System</strong> &nbsp;·&nbsp; Course 22AIE214 — Introduction to
+    AI &amp; Robotics &nbsp;·&nbsp;
+    CH Vaishnavi Krishna · Diya Prakash · Dondluru Keerthana · V R Sridevi
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ===== SIDEBAR ACTIVE STATE =====
+    const sideLinks = document.querySelectorAll('.sidebar-nav a');
+    function setActive() {
+      let cur = '';
+      document.querySelectorAll('.section').forEach(s => {
+        if (window.scrollY >= s.offsetTop - 80) cur = s.id;
+      });
+      sideLinks.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', setActive);
+
+    // ===== THREE.JS SIMULATION =====
+    const container = document.getElementById('threeContainer').parentElement;
+    const canvas = document.getElementById('threeContainer');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x141c2b);
+    scene.fog = new THREE.Fog(0x141c2b, 18, 30);
+
+    function resizeSim() {
+      const w = container.clientWidth, h = container.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0x223355, 0.9));
+    const keyL = new THREE.DirectionalLight(0x8bbcdd, 2.8);
+    keyL.position.set(5, 8, 4); keyL.castShadow = true;
+    scene.add(keyL);
+    const fillL = new THREE.DirectionalLight(0xe8a020, 0.5);
+    fillL.position.set(-5, 3, -3); scene.add(fillL);
+    const rimL = new THREE.PointLight(0xe8a020, 1.2, 18);
+    rimL.position.set(-3, 5, -4); scene.add(rimL);
+
+    // Ground
+    const gnd = new THREE.Mesh(new THREE.PlaneGeometry(14, 14),
+      new THREE.MeshStandardMaterial({ color: 0x0c1520, roughness: 0.95 }));
+    gnd.rotation.x = -Math.PI / 2; gnd.receiveShadow = true; scene.add(gnd);
+    scene.add(new THREE.GridHelper(12, 24, 0x1c2b4a, 0x0f1c2e));
+
+    // Canvas Drawing Texture Setup
+    const drawCanvas2d = document.createElement('canvas');
+    drawCanvas2d.width = 1024; drawCanvas2d.height = 1024;
+    const dCtx = drawCanvas2d.getContext('2d');
+    dCtx.lineCap = 'round'; dCtx.lineJoin = 'round';
+    dCtx.fillStyle = '#f5f4f0'; // Base paper color
+    dCtx.fillRect(0, 0, 1024, 1024);
+    const drawTex = new THREE.CanvasTexture(drawCanvas2d);
+
+    // Materials
+    const mBase = new THREE.MeshStandardMaterial({ color: 0x1c2b4a, roughness: 0.4, metalness: 0.7 });
+    const mJoint = new THREE.MeshStandardMaterial({ color: 0xe8a020, roughness: 0.35, metalness: 0.5 });
+    const mLink1 = new THREE.MeshStandardMaterial({ color: 0x1c3a6a, roughness: 0.5, metalness: 0.6 });
+    const mLink2 = new THREE.MeshStandardMaterial({ color: 0x1a3055, roughness: 0.5, metalness: 0.5 });
+    const mLink3 = new THREE.MeshStandardMaterial({ color: 0x1c2b4a, roughness: 0.5, metalness: 0.5 });
+    const mPen = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
+    const mTip = new THREE.MeshStandardMaterial({ color: 0xe8a020, emissive: 0xe8a020, emissiveIntensity: 0.4 });
+    const mPaper = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, map: drawTex });
+
+    // Increased Arm Segments for full canvas reach!
+    const L = [1.65, 1.45, 0.75];
+
+    function map3DToCanvas(x, z) {
+      // Paper is at x: 1.6, z: 0. Width is 3.2, Height is 2.6
+      // TopLeft in 3D: x: 1.6 - 1.6 = 0, z: 0 - 1.3 = -1.3
+      const cx = ((x - 0) / 3.2) * 1024;
+      const cy = ((z - (-1.3)) / 2.6) * 1024;
+      return { cx, cy };
+    }
+
+    function bx(w, h, d, m) { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.castShadow = true; o.receiveShadow = true; return o; }
+    function cy(rt, rb, h, m, s = 16) { const o = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, s), m); o.castShadow = true; o.receiveShadow = true; return o; }
+    function sp(r, m) { const o = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 16), m); o.castShadow = true; return o; }
+
+    // Paper (PlaneGeometry ensures stable 0..1 UV mapping)
+    const paper = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 2.6), mPaper);
+    paper.rotation.x = -Math.PI / 2;
+    paper.position.set(1.6, 0.005, 0);
+    paper.receiveShadow = true;
+    scene.add(paper);
+
+    // Base
+    const baseG = new THREE.Group(); scene.add(baseG);
+    const bp = bx(0.8, 0.12, 0.8, mBase); bp.position.y = 0.06; baseG.add(bp);
+    const bc = cy(0.22, 0.28, 0.3, mBase); bc.position.y = 0.21; baseG.add(bc);
+    const sh = cy(0.16, 0.18, 0.18, mJoint, 20); sh.position.y = 0.42; baseG.add(sh);
+
+    // Shoulder pivot
+    const sP = new THREE.Group(); sP.position.set(0, 0.42, 0); baseG.add(sP);
+    const l1g = new THREE.Group(); sP.add(l1g);
+    const l1b = cy(0.06, 0.08, L[0], mLink1); l1b.rotation.z = -Math.PI / 2; l1b.position.x = L[0] / 2; l1g.add(l1b);
+    [0.2, 0.5].forEach(px => { const bd = cy(0.085, 0.085, 0.055, mJoint, 20); bd.rotation.z = -Math.PI / 2; bd.position.x = px; l1g.add(bd); });
+    const ej = sp(0.13, mJoint); ej.position.x = L[0]; l1g.add(ej);
+    const ed = cy(0.14, 0.14, 0.08, mBase, 20); ed.rotation.z = -Math.PI / 2; ed.position.x = L[0]; l1g.add(ed);
+
+    const eP = new THREE.Group(); eP.position.x = L[0]; l1g.add(eP);
+    const l2g = new THREE.Group(); eP.add(l2g);
+    const l2b = cy(0.055, 0.07, L[1], mLink2); l2b.rotation.z = -Math.PI / 2; l2b.position.x = L[1] / 2; l2g.add(l2b);
+    const fab = cy(0.072, 0.072, 0.055, mJoint, 20); fab.rotation.z = -Math.PI / 2; fab.position.x = 0.25; l2g.add(fab);
+    const wj = sp(0.1, mJoint); wj.position.x = L[1]; l2g.add(wj);
+    const wd = cy(0.11, 0.11, 0.07, mBase, 20); wd.rotation.z = -Math.PI / 2; wd.position.x = L[1]; l2g.add(wd);
+
+    const wP = new THREE.Group(); wP.position.x = L[1]; l2g.add(wP);
+    const l3g = new THREE.Group(); wP.add(l3g);
+    const l3b = cy(0.04, 0.055, L[2], mLink3); l3b.rotation.z = -Math.PI / 2; l3b.position.x = L[2] / 2; l3g.add(l3b);
+    const ph = bx(0.12, 0.1, 0.1, mBase); ph.position.x = L[2]; l3g.add(ph);
+    const pb = cy(0.025, 0.03, 0.35, mPen); pb.rotation.z = -Math.PI / 2; pb.position.x = L[2] + 0.22; l3g.add(pb);
+    const pt = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.08, 12), mTip);
+    pt.rotation.z = -Math.PI / 2; pt.position.x = L[2] + 0.39; l3g.add(pt);
+
+    // Workspace circle
+    const wsT = new THREE.Mesh(new THREE.TorusGeometry(L[0] + L[1] + L[2], 0.012, 6, 80),
+      new THREE.MeshBasicMaterial({ color: 0xe8a020, transparent: true, opacity: 0.12 }));
+    wsT.rotation.x = Math.PI / 2; wsT.position.y = 0.1; scene.add(wsT);
+    scene.add(new THREE.AxesHelper(0.7));
+
+    // --- IK MATH TRANSLATED TO CURRENT METRICS ---
+    let currentAngles = { j1: 90, j2: 45, j3: -30 };
+    let targetAngles = { j1: 90, j2: 45, j3: -30 };
+
+    let drawingQueue = [];
+    let isDrawing = false;
+    let isMovingToStart = false;
+    let lastDrawPos = null;
+
+    function calculateIK(x, z, y_height) {
+      const r = Math.sqrt(x * x + z * z);
+      const d = Math.sqrt(r * r + y_height * y_height);
+
+      if (d > L[0] + L[1]) return null;
+
+      const t1 = Math.atan2(z, x) * 180 / Math.PI + 90;
+
+      const cosT3 = (L[0] * L[0] + L[1] * L[1] - d * d) / (2 * L[0] * L[1]);
+      const t3_internal = Math.acos(Math.max(-1, Math.min(1, cosT3))) * 180 / Math.PI;
+
+      const alpha = Math.atan2(y_height, r) * 180 / Math.PI;
+      const beta = Math.acos(Math.max(-1, Math.min(1, (L[0] * L[0] + d * d - L[1] * L[1]) / (2 * L[0] * d)))) * 180 / Math.PI;
+      const t2 = alpha + beta;
+
+      return { j1: t1, j2: t2, j3: t3_internal - 180 };
+    }
+
+    function generatePath(shapeText) {
+      const points = [];
+      const cx = 1.6; const cz = 0.0; const s = 0.45;
+      let shape = shapeText.toLowerCase().trim();
+
+      if (shape === 'square') {
+        points.push({ x: cx - s, z: cz - s }, { x: cx + s, z: cz - s }, { x: cx + s, z: cz + s }, { x: cx - s, z: cz + s }, { x: cx - s, z: cz - s });
+      } else if (shape === 'circle') {
+        for (let i = 0; i <= 36; i++) {
+          const a = (i / 36) * Math.PI * 2;
+          points.push({ x: cx + Math.cos(a) * s, z: cz + Math.sin(a) * s });
+        }
+      } else if (shape === 'star') {
+        for (let i = 0; i <= 10; i++) {
+          const r = i % 2 === 0 ? s : s * 0.4;
+          const a = (i / 10) * Math.PI * 2 - Math.PI / 2;
+          points.push({ x: cx + Math.cos(a) * r, z: cz + Math.sin(a) * r });
+        }
+      } else if (shape === 'spiral') {
+        for (let i = 0; i <= 50; i++) {
+          const a = (i / 10) * Math.PI;
+          const r = (i / 50) * s;
+          points.push({ x: cx + Math.cos(a) * r, z: cz + Math.sin(a) * r });
+        }
+      } else if (shape === 'hexagon') {
+        for (let i = 0; i <= 6; i++) {
+          const a = (i / 6) * Math.PI * 2;
+          points.push({ x: cx + Math.cos(a) * s, z: cz + Math.sin(a) * s });
+        }
+      } else {
+        points.push({ x: cx - s, z: cz - s }, { x: cx + s, z: cz - s }, { x: cx + s, z: cz + s }, { x: cx - s, z: cz + s }, { x: cx - s, z: cz - s });
+      }
+      return points;
+    }
+
+    function densifyPath(roughPoints) {
+      const dense = [];
+      for (let i = 0; i < roughPoints.length - 1; i++) {
+        const p1 = roughPoints[i]; const p2 = roughPoints[i + 1]; const steps = 10;
+        for (let j = 0; j < steps; j++) {
+          dense.push({
+            x: p1.x + (p2.x - p1.x) * (j / steps),
+            z: p1.z + (p2.z - p1.z) * (j / steps)
+          });
+        }
+      }
+      dense.push(roughPoints[roughPoints.length - 1]);
+      return dense;
+    }
+
+    window.processInput = function () {
+      if (isDrawing) return;
+      const input = document.getElementById('aiPrompt').value || 'Square';
+      const roughPoints = generatePath(input);
+      drawingQueue = densifyPath(roughPoints);
+
+      isDrawing = true; isMovingToStart = true;
+
+      dCtx.fillStyle = '#f5f4f0'; // Base paper color
+      dCtx.fillRect(0, 0, drawCanvas2d.width, drawCanvas2d.height);
+      lastDrawPos = null;
+      drawTex.needsUpdate = true;
+
+      document.getElementById('sysState').textContent = 'COMPUTING & DRAWING...';
+      document.getElementById('sysState').style.color = '#e8a020';
+    }
+
+    function d2r(d) { return d * Math.PI / 180; }
+
+    function applyAngles(angles) {
+      if (!angles) return;
+      sP.rotation.y = d2r(angles.j1 - 90);
+      l1g.rotation.z = d2r(angles.j2);
+      eP.rotation.z = d2r(angles.j3);
+
+      // Wrist maintains downward orientation
+      wP.rotation.z = d2r(-90 - (angles.j2 + angles.j3));
+
+      // Telemetry updates
+      if (document.getElementById('t1v')) {
+        document.getElementById('t1v').textContent = angles.j1.toFixed(1) + '°';
+        document.getElementById('t2v').textContent = angles.j2.toFixed(1) + '°';
+        document.getElementById('t3v').textContent = angles.j3.toFixed(1) + '°';
+        document.getElementById('t4v').textContent = (180 - (angles.j2 + angles.j3)).toFixed(1) + '°';
+      }
+
+      scene.updateMatrixWorld(true);
+      const tipWorld = new THREE.Vector3();
+      pt.getWorldPosition(tipWorld);
+      if (document.getElementById('eePos')) {
+        document.getElementById('eePos').textContent = tipWorld.x.toFixed(2) + ', ' + tipWorld.z.toFixed(2);
+      }
+
+      // Draw if touching paper geometry (paper y = ~0.005, adding a tiny threshold)
+      if (isDrawing && !isMovingToStart && tipWorld.y < 0.05) {
+        const cPos = map3DToCanvas(tipWorld.x, tipWorld.z);
+        if (lastDrawPos) {
+          // Drawing solid line
+          dCtx.beginPath();
+          dCtx.strokeStyle = '#0284c7';
+          dCtx.lineWidth = 5;
+          dCtx.moveTo(lastDrawPos.cx, lastDrawPos.cy);
+          dCtx.lineTo(cPos.cx, cPos.cy);
+          dCtx.stroke();
+
+          // Drawing line glow
+          dCtx.beginPath();
+          dCtx.strokeStyle = 'rgba(2, 132, 199, 0.2)';
+          dCtx.lineWidth = 12;
+          dCtx.moveTo(lastDrawPos.cx, lastDrawPos.cy);
+          dCtx.lineTo(cPos.cx, cPos.cy);
+          dCtx.stroke();
+
+          drawTex.needsUpdate = true;
+        }
+        lastDrawPos = cPos;
+      } else {
+        lastDrawPos = null;
+      }
+    }
+
+    // Orbit controls mapping
+    let autoRot = false, isDn = false, lp = { x: 0, y: 0 };
+    let sph = { th: 0.7, ph: 0.8, r: 10 };
+    let tSph = { ...sph };
+
+    // Add mouse control directly to canvas wrapper
+    const wrapEventTarget = document.querySelector('.sim-canvas-wrap');
+    if (wrapEventTarget) {
+      wrapEventTarget.addEventListener('pointerdown', e => { isDn = true; lp = { x: e.clientX, y: e.clientY }; autoRot = false; });
+      window.addEventListener('pointermove', e => { if (!isDn) return; const dx = e.clientX - lp.x, dy = e.clientY - lp.y; tSph.th -= dx * 0.012; tSph.ph = Math.max(0.1, Math.min(Math.PI / 2, tSph.ph - dy * 0.012)); lp = { x: e.clientX, y: e.clientY }; });
+      window.addEventListener('pointerup', () => isDn = false);
+      wrapEventTarget.addEventListener('wheel', e => { tSph.r = Math.max(4, Math.min(22, tSph.r + e.deltaY * 0.02)); }, { passive: true });
+    }
+
+    let tt = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      tt += 1;
+
+      // Ik target logic update queue
+      if (isDrawing && drawingQueue.length > 0) {
+        const targetPoint = drawingQueue[0];
+        // Height calculation: shoulder is at 0.42. 3rd downward link is 1.14. 
+        // We want pen tip exactly at paper surface y=0.005. 0.005 + 1.14 - 0.42 = 0.725
+        const targetIK = calculateIK(targetPoint.x, targetPoint.z, 0.725);
+
+        if (targetIK) {
+          targetAngles = targetIK;
+          currentAngles.j1 += (targetAngles.j1 - currentAngles.j1) * 0.15;
+          currentAngles.j2 += (targetAngles.j2 - currentAngles.j2) * 0.15;
+          currentAngles.j3 += (targetAngles.j3 - currentAngles.j3) * 0.15;
+
+          // Check if reasonably close to IK target angles
+          let diffSum = Math.abs(currentAngles.j1 - targetAngles.j1) + Math.abs(currentAngles.j2 - targetAngles.j2);
+          if (diffSum < 0.2) {
+            drawingQueue.shift();
+            isMovingToStart = false; // Pointing down
+          }
+        } else {
+          drawingQueue.shift(); // Skip unreachable point
+          isMovingToStart = false;
+        }
+      } else if (isDrawing && drawingQueue.length === 0) {
+        // Wait until we reach the very last point before stopping drawing
+        let diffSumEnd = Math.abs(currentAngles.j1 - targetAngles.j1) + Math.abs(currentAngles.j2 - targetAngles.j2);
+
+        if (diffSumEnd < 0.2) {
+          isDrawing = false;
+          if (document.getElementById('sysState')) {
+            document.getElementById('sysState').textContent = 'IDLE / READY';
+            document.getElementById('sysState').style.color = '#2a7a4b';
+          }
+          targetAngles = { j1: 90, j2: 45, j3: -30 };
+        } else {
+          currentAngles.j1 += (targetAngles.j1 - currentAngles.j1) * 0.15;
+          currentAngles.j2 += (targetAngles.j2 - currentAngles.j2) * 0.15;
+          currentAngles.j3 += (targetAngles.j3 - currentAngles.j3) * 0.15;
+        }
+      }
+
+      if (!isDrawing) {
+        currentAngles.j1 += (targetAngles.j1 - currentAngles.j1) * 0.05;
+        currentAngles.j2 += (targetAngles.j2 - currentAngles.j2) * 0.05;
+        currentAngles.j3 += (targetAngles.j3 - currentAngles.j3) * 0.05;
+      }
+
+      applyAngles(currentAngles);
+
+      if (autoRot) tSph.th += 0.005;
+      sph.th += (tSph.th - sph.th) * 0.08;
+      sph.ph += (tSph.ph - sph.ph) * 0.08;
+      sph.r += (tSph.r - sph.r) * 0.08;
+      camera.position.set(
+        sph.r * Math.sin(sph.ph) * Math.cos(sph.th),
+        sph.r * Math.cos(sph.ph),
+        sph.r * Math.sin(sph.ph) * Math.sin(sph.th)
+      );
+      camera.lookAt(1.0, 0, 0); // Focus closer to paper center
+      keyL.intensity = 2.8 + 0.1 * Math.sin(tt * 0.015);
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', resizeSim);
+    resizeSim();
+    applyAngles(currentAngles);
+    animate();
+  </script>
+</body>
+
+</html>
